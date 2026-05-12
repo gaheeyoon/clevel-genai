@@ -259,6 +259,17 @@
 
       .add-prompt-row { padding: 0.75rem 1.5rem; }
 
+      /* Drag handle */
+      .drag-handle {
+        display: flex; align-items: center; justify-content: center;
+        width: 20px; min-width: 20px; cursor: grab; color: var(--text-muted);
+        align-self: stretch;
+      }
+      .drag-handle:active { cursor: grabbing; }
+      .drag-handle svg { width: 16px; height: 16px; }
+      .prompt-card.dragging { opacity: 0.4; }
+      .prompt-card.drag-over { border-top: 3px solid var(--accent-vw); background: #f0f9ff; }
+
       /* Instruction Cards (accordion) */
       .instruction-list { display: flex; flex-direction: column; gap: 1rem; }
 
@@ -652,6 +663,7 @@
         plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>',
         chevron: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>',
         link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>',
+        grip: '<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg>',
       };
 
       // ============================================================
@@ -761,7 +773,8 @@
           const dayNum = String(sIdx + 1).padStart(2, "0");
 
           const promptCards = sessionPrompts.map((p, pIdx) => `
-            <div class="prompt-card">
+            <div class="prompt-card" ${isAdmin ? `draggable="true" data-prompt-id="${p.id}" data-session-id="${session.id}"` : ''}>
+              ${isAdmin ? `<div class="drag-handle">${ICON.grip}</div>` : ''}
               <div class="prompt-number">${pIdx + 1}</div>
               <div class="prompt-content">
                 <div class="prompt-text">${escapeHtml(p.text)}</div>
@@ -813,6 +826,60 @@
             </div>
           `;
         }).join("");
+
+        attachDragListeners();
+      }
+
+      // ============================================================
+      // 드래그 앤 드롭 (프롬프트 순서 변경)
+      // ============================================================
+      let dragSrcId = null;
+
+      function attachDragListeners() {
+        if (!isAdmin) return;
+        document.querySelectorAll('.prompt-card[draggable="true"]').forEach(card => {
+          card.addEventListener('dragstart', e => {
+            dragSrcId = card.dataset.promptId;
+            card.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+          });
+          card.addEventListener('dragend', () => {
+            card.classList.remove('dragging');
+            document.querySelectorAll('.prompt-card').forEach(c => c.classList.remove('drag-over'));
+          });
+          card.addEventListener('dragover', e => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            document.querySelectorAll('.prompt-card').forEach(c => c.classList.remove('drag-over'));
+            if (card.dataset.promptId !== dragSrcId) card.classList.add('drag-over');
+          });
+          card.addEventListener('drop', async e => {
+            e.preventDefault();
+            card.classList.remove('drag-over');
+            if (!dragSrcId || dragSrcId === card.dataset.promptId) return;
+
+            const list = card.closest('.prompt-list-inner');
+            const cards = [...list.querySelectorAll('.prompt-card[draggable]')];
+            const srcEl = list.querySelector(`[data-prompt-id="${dragSrcId}"]`);
+            const srcIdx = cards.indexOf(srcEl);
+            const dstIdx = cards.indexOf(card);
+
+            if (srcIdx < dstIdx) list.insertBefore(srcEl, card.nextSibling);
+            else list.insertBefore(srcEl, card);
+
+            [...list.querySelectorAll('.prompt-card')].forEach((c, i) => {
+              c.querySelector('.prompt-number').textContent = i + 1;
+            });
+
+            const newOrder = [...list.querySelectorAll('.prompt-card[draggable]')].map((c, i) => ({
+              id: parseInt(c.dataset.promptId), sort_order: i + 1
+            }));
+            await Promise.all(newOrder.map(u =>
+              db.from('prompts').update({ sort_order: u.sort_order }).eq('id', u.id)
+            ));
+            showToast('순서가 저장되었습니다.');
+          });
+        });
       }
 
       function toggleSession(id) {
