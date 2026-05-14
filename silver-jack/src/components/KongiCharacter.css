@@ -1,0 +1,286 @@
+/* ── WRAP ── */
+.kongi-wrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 200px;
+  height: 240px;
+  position: relative;
+}
+
+.kongi {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── SOIL ── */
+.soil {
+  width: 120px;
+  height: 22px;
+  background: linear-gradient(180deg, #8B5E3C 0%, #6B3F1F 100%);
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  flex-shrink: 0;
+}
+.soil.dark { background: linear-gradient(180deg, #5a4a3a 0%, #3d2e1e 100%); }
+
+/* ── WHITE STEM (공통) ── */
+.white-stem {
+  width: 14px;
+  background: linear-gradient(180deg, #f0ede8, #e0d8cc);
+  border-radius: 7px;
+  flex-shrink: 0;
+  margin-bottom: -3px;
+}
+.white-stem.s30 { height: 30px; }
+.white-stem.s50 { height: 50px; }
+.white-stem.s65 { height: 65px; }
+.white-stem.s80 { height: 80px; }
+.white-stem.s90 { height: 90px; }
+
+/* ── FACE ── */
+.face { position: relative; width: 100%; height: 100%; }
+
+.eye {
+  width: 9px; height: 10px;
+  background: #2d2d2d;
+  border-radius: 50%;
+  position: absolute;
+}
+.eye.star {
+  background: none;
+  font-size: 13px;
+  width: auto; height: auto;
+  color: #f9a825;
+}
+.eye.star::after { content: '★'; }
+.eye.x {
+  background: none;
+  color: #888;
+  font-size: 13px;
+  font-weight: 800;
+  width: auto; height: auto;
+}
+.eye.x::after { content: '✕'; }
+
+.mouth {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.mouth.tiny-smile {
+  width: 14px; height: 7px;
+  border: 2px solid #2d2d2d;
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  bottom: 9px;
+}
+.mouth.smile {
+  width: 20px; height: 10px;
+  border: 2.5px solid #2d2d2d;
+  border-top: none;
+  border-radius: 0 0 20px 20px;
+  bottom: 11px;
+}
+.mouth.big-smile {
+  width: 26px; height: 13px;
+  border: 2.5px solid #2d2d2d;
+  border-top: none;
+  border-radius: 0 0 26px 26px;
+  bottom: 13px;
+}
+.mouth.excited {
+  width: 30px; height: 15px;
+  border: 2.5px solid #2d2d2d;
+  border-top: none;
+  border-radius: 0 0 30px 30px;
+  background: #ff8a80;
+  bottom: 14px;
+}
+.mouth.sad {
+  width: 20px; height: 10px;
+  border: 2.5px solid #aaa;
+  border-bottom: none;
+  border-radius: 20px 20px 0 0;
+  bottom: 10px;
+}
+
+.blush {
+  position: absolute;
+  width: 12px; height: 7px;
+  background: rgba(255, 140, 140, 0.45);
+  border-radius: 50%;
+  bottom: 18px;
+}
+.blush.left  { left: 7px; }
+.blush.right { right: 7px; }
+
+/* ── LEAVES ── */
+.leaf {
+  position: absolute;
+  width: 24px; height: 14px;
+  background: linear-gradient(135deg, #81c784, #4caf50);
+  border-radius: 50%;
+  top: 22px;
+}
+.leaf.left  { left: -20px; transform: rotate(-25deg); }
+.leaf.right { right: -20px; transform: rotate(25deg); }
+.leaf.big   { width: 32px; height: 18px; }
+
+/* ── SPARKLES ── */
+.sparkle {
+  position: absolute;
+  color: #ffd54f;
+  font-size: 16px;
+  animation: sparkleFloat 1.6s ease-in-out infinite;
+}
+.sparkle.s1 { top: -8px;  left: -10px; animation-delay: 0s; }
+.sparkle.s2 { top: -14px; right: -4px; animation-delay: 0.55s; }
+.sparkle.s3 { bottom: 6px; right: -14px; animation-delay: 1.1s; }
+
+@keyframes sparkleFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 1; }
+  50%       { transform: translateY(-7px) scale(1.2); opacity: 0.7; }
+}
+
+/* ══════════════ 1일: 씨앗 담그기 ══════════════ */
+.soaking-kongi { gap: 0; }
+.bowl {
+  width: 90px; height: 60px;
+  background: linear-gradient(180deg, #bbdefb, #90caf9);
+  border-radius: 0 0 45px 45px;
+  border: 3px solid #64b5f6;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: -4px;
+}
+.water-surface {
+  position: absolute; top: 8px; left: 0; right: 0;
+  height: 3px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 2px;
+}
+.seed-in-water {
+  width: 42px; height: 48px;
+  background: radial-gradient(circle at 40% 35%, #d4a76a, #8B5E3C);
+  border-radius: 50% 50% 45% 45%;
+  position: absolute;
+  bottom: 4px; left: 50%; transform: translateX(-50%);
+  animation: seedBob 2.5s ease-in-out infinite;
+}
+
+/* ══════════════ 2일: 발아 ══════════════ */
+.germinate-kongi { gap: 0; }
+.seed-body {
+  width: 54px; height: 58px;
+  background: radial-gradient(circle at 40% 35%, #c8a96e, #8B5E3C);
+  border-radius: 50% 50% 45% 45%;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  margin-bottom: -3px;
+  animation: seedBob 2.5s ease-in-out infinite;
+}
+.root-tail {
+  width: 8px; height: 22px;
+  background: linear-gradient(180deg, #e8ddd0, #c8bfb0);
+  border-radius: 0 0 4px 4px;
+  margin-top: -18px;
+  margin-bottom: 0;
+  z-index: -1;
+}
+
+@keyframes seedBob {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-5px); }
+}
+
+/* ══════════════ 3일: 새싹 ══════════════ */
+.tiny-kongi { gap: 0; }
+.tiny-head {
+  width: 44px; height: 44px;
+  background: radial-gradient(circle at 40% 35%, #c5e1a5, #558b2f);
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(85,139,47,0.3);
+  animation: sway 3.5s ease-in-out infinite;
+}
+
+/* ══════════════ 4일: 성장 ══════════════ */
+.growing-kongi { gap: 0; }
+.growing-head {
+  width: 58px; height: 58px;
+  background: radial-gradient(circle at 40% 35%, #aed581, #558b2f);
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 5px 14px rgba(85,139,47,0.3);
+  animation: sway 3s ease-in-out infinite;
+}
+
+/* ══════════════ 5일: 콩나물 ══════════════ */
+.sprout-kongi { gap: 0; }
+.sprout-head {
+  width: 70px; height: 70px;
+  background: radial-gradient(circle at 40% 35%, #b5e48c, #4caf50);
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 6px 16px rgba(76,175,80,0.3);
+  animation: sway 3s ease-in-out infinite;
+}
+
+/* ══════════════ 6일: 무성한 콩나물 ══════════════ */
+.full-kongi { gap: 0; }
+.full-head {
+  width: 82px; height: 82px;
+  background: radial-gradient(circle at 40% 35%, #ccff90, #43a047);
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 8px 20px rgba(67,160,71,0.35);
+  animation: sway 2.8s ease-in-out infinite;
+}
+
+/* ══════════════ 7일: 수확 ══════════════ */
+.harvest-kongi { gap: 0; }
+.harvest-head {
+  width: 92px; height: 92px;
+  background: radial-gradient(circle at 40% 35%, #d4fca0, #2e7d32);
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 10px 28px rgba(46,125,50,0.4);
+  animation: harvestDance 1.2s ease-in-out infinite;
+}
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-3deg); }
+  50%       { transform: rotate(3deg); }
+}
+@keyframes harvestDance {
+  0%, 100% { transform: rotate(-5deg) scale(1); }
+  50%       { transform: rotate(5deg) scale(1.04); }
+}
+
+/* ══════════════ 죽음 ══════════════ */
+.dead-kongi { opacity: 0.65; filter: grayscale(70%); }
+.dead-head {
+  width: 58px; height: 54px;
+  background: radial-gradient(circle at 40% 35%, #ccc, #888);
+  border-radius: 50%;
+  position: relative;
+  transform: rotate(18deg);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+.dead-stem {
+  width: 10px; height: 50px;
+  background: linear-gradient(180deg, #bbb, #888);
+  border-radius: 5px;
+  transform: rotate(12deg);
+  margin-bottom: -3px;
+}
+
+/* ── MOOD TINTS ── */
+.mood-sad .tiny-head,
+.mood-sad .growing-head,
+.mood-sad .sprout-head,
+.mood-sad .full-head {
+  filter: brightness(0.85) saturate(0.65);
+}

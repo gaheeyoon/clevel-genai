@@ -1,0 +1,17 @@
+{
+  "name": "Silver Jack",
+  "short_name": "실버잭",
+  "description": "콩이와 함께하는 하루 - 어르신을 위한 AI 콩나물 다마고찌",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f1f8e9",
+  "theme_color": "#4caf50",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
